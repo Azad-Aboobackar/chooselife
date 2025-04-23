@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChooseLife - Anti-Drug Campaign</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6b48ff;
+      --primary-light: #a78bff;
+      --primary-dark: #3b1e99;
+      --secondary: #ff3cac;
+      --secondary-light: #ff6cd9;
+      --text-light: #ffffff;
+      --text-dark: #0f0f1a;
+      --bg-light: #e5e9ff;
+      --bg-dark: #0a0a14;
+      --success: #00ff9d;
+      --warning: #ffd700;
+      --danger: #ff3c3c;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --neon-glow: 0 0 15px rgba(255, 60, 172, 0.7);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      overflow-x: hidden;
+      color: var(--text-light);
+      background: linear-gradient(180deg, #0a0a14 0%, #1e1e3f 100%);
+      position: relative;
+    }
+
+    /* Cosmic Background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"%3E%3Cfilter id="bb"%3E%3CfeGaussianBlur in="SourceGraphic" stdDeviation="15"/%3E%3C/filter%3E%3Ccircle cx="400" cy="400" r="300" fill="%231e1e3f" filter="url(%23bb)"/%3E%3Ccircle cx="100" cy="100" r="50" fill="%23ff3cac" filter="url(%23bb)"/%3E%3Ccircle cx="700" cy="700" r="70" fill="%236b48ff" filter="url(%23bb)"/%3E%3C/svg%3E') center/cover;
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 1rem 0;
+      transition: all 0.4s ease;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header.scrolled {
+      background: rgba(30, 30, 63, 0.95);
+      box-shadow: var(--shadow);
+      padding: 0.8rem 0;
+    }
+
+    .logo-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-light);
+      text-decoration: none;
+      background: linear-gradient(45deg, var(--secondary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: var(--neon-glow);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--text-light);
+      font-weight: 600;
+      text-decoration: none;
+      position: relative;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary);
+      transition: width 0.3s ease;
+      box-shadow: var(--neon-glow);
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    .nav-pledge {
+      padding: 0.5rem 1.2rem;
+      background: var(--secondary);
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      box-shadow: var(--neon-glow);
+    }
+
+    .nav-pledge:hover {
+      background: var(--secondary-light);
+      transform: scale(1.1);
+      box-shadow: 0 0 25px var(--secondary);
+    }
+
+    .mobile-toggle {
+      display: none;
+      cursor: pointer;
+      color: var(--text-light);
+      font-size: 1.8rem;
+      z-index: 1002;
+      background: transparent;
+      border: none;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+      overflow: hidden;
+    }
+
+    .particles-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
+      z-index: 2;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 600px;
+      color: var(--text-light);
+      padding: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 4.5rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 20px rgba(255, 60, 172, 0.7);
+      letter-spacing: -1px;
+    }
+
+    .hero h1 span {
+      color: var(--secondary);
+      display: block;
+      position: relative;
+    }
+
+    .hero h1 span::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60%;
+      height: 4px;
+      background: var(--secondary);
+      border-radius: 10px;
+      box-shadow: var(--neon-glow);
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: var(--secondary);
+      color: var(--text-light);
+      box-shadow: var(--neon-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--secondary-light);
+      transform: translateY(-5px);
+      box-shadow: 0 0 30px var(--secondary);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-light);
+      border: 2px solid var(--text-light);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-outline:hover {
+      background: var(--text-light);
+      color: var(--primary-dark);
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px var(--text-light);
+    }
+
+    .hero-image {
+      position: relative;
+      width: 35%;
+      height: 60vh;
+      z-index: 3;
+      perspective: 1000px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-image-content {
+      width: 100%;
+      height: 100%;
+      background-image: url('https://i.pinimg.com/736x/56/23/1d/56231d86ad9a834ba521fc54ed5f6c01.jpg');
+      background-size: cover;
+      background-position: center;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.5s ease;
+      transform: rotateY(-15deg);
+      border: 5px solid var(--glass-bg);
+      backdrop-filter: blur(5px);
+    }
+
+    .hero-image-content:hover {
+      transform: rotateY(0deg) scale(1.05);
+    }
+
+    /* Facts */
+    .facts {
+      padding: 6rem 0;
+      background: transparent;
+      position: relative;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--text-light);
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+      text-shadow: var(--neon-glow);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100px;
+      height: 5px;
+      background: var(--secondary);
+      border-radius: 3px;
+      box-shadow: var(--neon-glow);
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      opacity: 0.8;
+      max-width: 700px;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .facts-container {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .facts-tabs {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .fact-tab {
+      background: var(--glass-bg);
+      padding: 1.2rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-left: 5px solid transparent;
+      display: flex;
+      align-items: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .fact-tab:hover {
+      transform: translateX(10px);
+      background: var(--primary-light);
+      color: var(--text-light);
+      box-shadow: 0 0 20px var(--primary-light);
+    }
+
+    .fact-tab.active {
+      border-left: 5px solid var(--secondary);
+      background: var(--primary);
+      color: var(--text-light);
+      transform: translateX(10px);
+      box-shadow: 0 0 30px var(--primary);
+    }
+
+    .fact-tab i {
+      color: var(--secondary);
+      font-size: 1.5rem;
+      margin-right: 0.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .fact-tab.active i {
+      color: var(--text-light);
+    }
+
+    .fact-tab h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .facts-content {
+      width: 70%;
+      background: var(--glass-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .facts-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, var(--primary-light), transparent);
+      opacity: 0.2;
+      border-radius: 0 0 0 100%;
+    }
+
+    .fact-content {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .fact-content.active {
+      display: block;
+    }
+
+    .fact-content h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      color: var(--text-light);
+      text-shadow: var(--neon-glow);
+    }
+
+    .fact-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .fact-stat {
+      flex: 1;
+      text-align: center;
+      padding: 1.2rem;
+      background: var(--glass-bg);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .fact-stat:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 30px rgba(255, 60, 172, 0.5);
+    }
+
+    .fact-stat-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--secondary);
+      display: block;
+      margin-bottom: 0.5rem;
+      text-shadow: var(--neon-glow);
+    }
+
+    .fact-stat-label {
+      font-size: 1rem;
+      color: var(--text-light);
+      opacity: 0.8;
+      font-weight: 500;
+    }
+
+    .facts-counter {
+      margin-top: 3rem;
+      display: flex;
+      gap: 1.5rem;
+      background: var(--glass-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      color: var(--text-light);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .facts-counter::after {
+      content: '';
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      top: -120px;
+      right: -120px;
+    }
+
+    .counter-item {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .counter-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--text-light), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: var(--neon-glow);
+    }
+
+    .counter-label {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: var(--text-light);
+      padding: 6rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonials::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://i.pinimg.com/736x/58/ad/e0/58ade08eef34db19e697d564fadb11cd.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+    .testimonial-slider {
+      margin-top: 2rem;
+    }
+
+    .testimonial-slide {
+      display: none;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .testimonial-slide.active {
+      display: flex;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .testimonial-content {
+      padding: 2.5rem;
+      flex: 1;
+      position: relative;
+    }
+
+    .testimonial-quote {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+      font-style: italic;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+
+    .testimonial-quote::before {
+      content: '"';
+      font-size: 4rem;
+      position: absolute;
+      top: 15px;
+      left: 25px;
+      color: var(--secondary);
+      opacity: 0.3;
+      font-family: Georgia, serif;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .testimonial-author h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      margin: 0;
+      font-size: 1.2rem;
+      text-shadow: var(--neon-glow);
+    }
+
+    .testimonial-author p {
+      opacity: 0.8;
+      margin: 0;
+    }
+
+    .testimonial-image {
+      width: 40%;
+      height: 400px;
+      background-size: cover;
+      background-position: center;
+      transition: transform 5s ease;
+      position: relative;
+      border-radius: 15px;
+    }
+
+    .testimonial-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent 50%, rgba(0, 0, 0, 0.3));
+    }
+
+    .testimonial-slide:hover .testimonial-image {
+      transform: scale(1.05);
+    }
+
+    .testimonial-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .testimonial-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .testimonial-dot.active {
+      background: var(--secondary);
+      transform: scale(1.3);
+      box-shadow: var(--neon-glow);
+    }
+
+    /* Resources */
+    .resources {
+      padding: 6rem 0;
+      background: transparent;
+      position: relative;
+    }
+
+    .resources::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.05), transparent);
+    }
+
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .resource-card {
+      background: var(--glass-bg);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .resource-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-15px) rotateX(5deg);
+      box-shadow: 0 0 50px rgba(255, 60, 172, 0.5);
+    }
+
+    .resource-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .resource-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: var(--text-light);
+      font-size: 2rem;
+      transition: all 0.5s ease;
+      box-shadow: var(--neon-glow);
+    }
+
+    .resource-card:hover .resource-icon {
+      transform: rotateY(360deg);
+      background: var(--secondary);
+      box-shadow: 0 0 30px var(--secondary);
+    }
+
+    .resource-card h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--text-light);
+      text-shadow: var(--neon-glow);
+    }
+
+    .resource-card p {
+      margin-bottom: 1.5rem;
+      color: var(--text-light);
+      opacity: 0.8;
+      line-height: 1.6;
+      flex-grow: 1;
+    }
+
+    .resource-card .btn {
+      align-self: flex-start;
+    }
+
+    .emergency-block {
+      background: linear-gradient(135deg, var(--danger), #c0392b);
+      border-radius: 15px;
+      padding: 2.5rem;
+      margin-top: 4rem;
+      color: var(--text-light);
+      box-shadow: 0 0 50px rgba(255, 60, 60, 0.5);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .emergency-block::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 120px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+    }
+
+    .emergency-block h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      text-shadow: var(--neon-glow);
+    }
+
+    .emergency-numbers {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .emergency-number {
+      flex: 1;
+      text-align: center;
+      background: var(--glass-bg);
+      padding: 1.2rem;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .emergency-number:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px var(--danger);
+    }
+
+    .number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      display: block;
+      margin-bottom: 0.5rem;
+      text-shadow: var(--neon-glow);
+    }
+
+    .label {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    /* Pledge */
+    .pledge {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+      color: var(--text-light);
+      padding: 6rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pledge::before,
+    .pledge::after {
+      content: '';
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1;
+    }
+
+    .pledge::before {
+      top: -120px;
+      left: -120px;
+    }
+
+    .pledge::after {
+      bottom: -120px;
+      right: -120px;
+    }
+
+    .pledge-content {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pledge-info {
+      flex: 1;
+    }
+
+    .pledge-info p {
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      opacity: 0.9;
+      line-height: 1.7;
+    }
+
+    #pledge-counter {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 800;
+      font-size: 2.2rem;
+      background: linear-gradient(45deg, var(--secondary), var(--success));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin: 0 5px;
+      text-shadow: var(--neon-glow);
+    }
+
+    .pledge-form {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      color: var(--text-light);
+      max-width: 450px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pledge-form::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 0 0 0 100%;
+    }
+
+    .pledge-form h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      text-shadow: var(--neon-glow);
+    }
+
+    .pledge-form h3::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--secondary);
+      border-radius: 3px;
+      box-shadow: var(--neon-glow);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: block;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      background: var(--glass-bg);
+      color: var(--text-light);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .form-group input:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.3);
+      outline: none;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--bg-dark);
+      color: var(--text-light);
+      padding: 4rem 0 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary-dark), var(--secondary), var(--primary-light));
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .footer-info {
+      flex: 2;
+      min-width: 280px;
+    }
+
+    .footer-info p {
+      margin-top: 1.2rem;
+      opacity: 0.8;
+      line-height: 1.7;
+    }
+
+    .footer-links {
+      flex: 3;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links-column {
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .footer-links-column h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      font-weight: 600;
+      text-shadow: var(--neon-glow);
+    }
+
+    .footer-links-column h3::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--secondary);
+      border-radius: 3px;
+      box-shadow: var(--neon-glow);
+    }
+
+    .footer-links-column ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .footer-links-column li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-links-column a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .footer-links-column a:hover {
+      color: var(--secondary);
+      padding-left: 5px;
+      text-shadow: var(--neon-glow);
+    }
+
+    .footer-bottom {
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light);
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .social-link:hover {
+      background: var(--secondary);
+      transform: translateY(-5px) rotateY(360deg);
+      box-shadow: var(--neon-glow);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s ease;
+    }
+
+    .animate-on-scroll.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+    .delay-400 { transition-delay: 0.4s; }
+    .delay-500 { transition-delay: 0.5s; }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .hero-content {
+        text-align: center;
+        margin: 0 auto;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+      }
+
+      .hero h1 span::after {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40%;
+      }
+
+      .hero-image {
+        display: none;
+      }
+
+      .facts-container {
+        flex-direction: column;
+      }
+
+      .facts-tabs, .facts-content {
+        width: 100%;
+      }
+
+      .pledge-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .pledge-form {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .section-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        height: 100vh;
+        background: var(--primary-dark);
+        flex-direction: column;
+        padding: 5rem 2rem;
+        transition: right 0.4s ease;
+        align-items: center;
+        justify-content: center;
+        z-index: 1001;
+      }
+
+      .nav-menu.active {
+        right: 0;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .mobile-toggle {
+        display: block;
+      }
+
+      .mobile-toggle.active i {
+        color: var(--secondary);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .section-title {
+        font-size: 2.2rem;
+      }
+
+      .section-subtitle {
+        font-size: 1rem;
+      }
+
+      .fact-stats, .facts-counter, .emergency-numbers {
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+
+      .fact-stat-value {
+        font-size: 2rem;
+      }
+
+      .counter-value {
+        font-size: 2.2rem;
+      }
+
+      .testimonial-slide {
+        flex-direction: column;
+      }
+
+      .testimonial-image {
+        width: 100%;
+        height: 250px;
+      }
+
+      .testimonial-quote {
+        font-size: 1rem;
+      }
+
+      .resource-card {
+        padding: 1.5rem;
+      }
+
+      .resource-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+      }
+
+      .emergency-block {
+        padding: 2rem;
+      }
+
+      .number {
+        font-size: 1.5rem;
+      }
+
+      .pledge-form {
+        padding: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1.2rem;
+        text-align: center;
+      }
+
+      .section-title, 
+      .section-subtitle {
+        text-align: center;
+      }
+
+      .pledge-info .section-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .logo-text {
+        font-size: 1.8rem;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero p {
+        font-size: 0.9rem;
+      }
+
+      .btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+      }
+
+      .section-subtitle {
+        font-size: 0.9rem;
+      }
+
+      .fact-content h3 {
+        font-size: 1.5rem;
+      }
+
+      .fact-tab h3 {
+        font-size: 0.9rem;
+      }
+
+      .fact-tab i {
+        font-size: 1.2rem;
+      }
+
+      .fact-stat-value {
+        font-size: 1.8rem;
+      }
+
+      .counter-value {
+        font-size: 1.8rem;
+      }
+
+      .resource-card h3 {
+        font-size: 1.2rem;
+      }
+
+      .emergency-block h3 {
+        font-size: 1.6rem;
+      }
+
+      .pledge-form h3 {
+        font-size: 1.5rem;
+      }
+
+      #pledge-counter {
+        font-size: 1.8rem;
+      }
+
+      .footer-info h3 {
+        font-size: 1.6rem;
+      }
+
+      .footer-links-column h3 {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <nav class="d-flex justify-content-between align-items-center">
+        <a href="#" class="logo-text">ChooseLife</a>
+        <button class="mobile-toggle" aria-label="Toggle menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-menu">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#facts">Facts</a></li>
+          <li><a href="#stories">Stories</a></li>
+          <li><a href="#resources">Resources</a></li>
+          <li><a href="#pledge" class="nav-pledge">Take Pledge</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section id="home" class="hero">
+    <canvas id="particles-canvas" class="particles-canvas"></canvas>
+    <div class="hero-overlay"></div>
+    <div class="container d-flex align-items-center justify-content-between h-100">
+      <div class="hero-content animate-on-scroll">
+        <h1>Break Free. <span>Live Fully.</span></h1>
+        <p>Drugs steal dreams. Reclaim your future with knowledge, support, and a commitment to a drug-free life.</p>
+        <div class="d-flex gap-3">
+          <a href="#facts" class="btn btn-primary">Discover the Truth <i class="fas fa-arrow-right"></i></a>
+          <a href="#pledge" class="btn btn-outline">Make Your Pledge</a>
+        </div>
+      </div>
+      <div class="hero-image animate-on-scroll delay-200">
+        <div class="hero-image-content"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="facts" class="facts">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">Uncover the Truth</h2>
+      <p class="section-subtitle animate-on-scroll delay-100">Knowledge is power. Learn the undeniable facts about drugs to make informed choices for your future.</p>
+      <div class="facts-container">
+        <div class="facts-tabs animate-on-scroll delay-200">
+          <div class="fact-tab active" data-tab="1"><i class="fas fa-brain"></i><h3>Brain Impact</h3></div>
+          <div class="fact-tab" data-tab="2"><i class="fas fa-heartbeat"></i><h3>Physical Health</h3></div>
+          <div class="fact-tab" data-tab="3"><i class="fas fa-users"></i><h3>Social Effects</h3></div>
+          <div class="fact-tab" data-tab="4"><i class="fas fa-skull"></i><h3>Overdose Risks</h3></div>
+        </div>
+        <div class="facts-content animate-on-scroll delay-300">
+          <div class="fact-content active" data-content="1">
+            <h3>Brain Impact</h3>
+            <p>Drugs disrupt brain function, impairing memory, decision-making, and emotional regulation. Chronic use can cause irreversible damage to neural pathways that are essential for healthy cognitive function.</p>
+            <div class="fact-stats">
+              <div class="fact-stat"><span class="fact-stat-value">4x</span><span class="fact-stat-label">Depression Risk</span></div>
+              <div class="fact-stat"><span class="fact-stat-value">70%</span><span class="fact-stat-label">Anxiety Disorders</span></div>
+              <div class="fact-stat"><span class="fact-stat-value">8</span><span class="fact-stat-label">IQ Points Lost</span></div>
+            </div>
+          </div>
+          <div class="fact-content" data-content="2">
+            <h3>Physical Health</h3>
+            <p>Drug abuse damages vital organs, weakens immunity, and increases chronic disease risk. From heart and lung damage to deteriorating liver function, substance abuse takes a severe toll on physical wellbeing.</p>
+            <div class="fact-stats">
+              <div class="fact-stat"><span class="fact-stat-value">50%</span><span class="fact-stat-label">Heart Disease Risk</span></div>
+              <div class="fact-stat"><span class="fact-stat-value">80%</span><span class="fact-stat-label">Liver Damage</span></div>
+              <div class="fact-stat"><span class="fact-stat-value">10x</span><span class="fact-stat-label">Infection Risk</span></div>
+            </div>
+          </div>
+          <div class="fact-content" data-content="3">
+            <h3>Social Effects</h3>
+            <p>Drugs strain relationships, isolate individuals, and contribute to crime and unemployment. The impact extends beyond the individual to families, friends, and entire communities.</p>
+            <div class="fact-stats">
+              <div class="fact-stat"><span class="fact-stat-value">60%</span><span class="fact-stat-label">Family Breakdowns</span></div>
+              <div class="fact-stat"><span class="fact-stat-value">45%</span><span class="fact-stat-label">Job Loss</span></div>
+              <div class="fact-stat"><span class="fact-stat-value">30%</span><span class="fact-stat-label">Homelessness</span></div>
+            </div>
+          </div>
+          <div class="fact-content" data-content="4">
+            <h3>Overdose Risks</h3>
+            <p>Drug overdoses are a leading cause of preventable death, with rising rates due to increasingly potent substances and dangerous combinations. What starts as experimentation can end in tragedy.</p>
+            <div class="fact-stats">
+              <div class="fact-stat"><span class="fact-stat-value">100k+</span><span class="fact-stat-label">Annual Deaths</span></div>
+              <div class="fact-stat"><span class="fact-stat-value">20%</span><span class="fact-stat-label">First-Time Users</span></div>
+              <div class="fact-stat"><span class="fact-stat-value">5min</span><span class="fact-stat-label">Time to Fatal OD</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="facts-counter animate-on-scroll delay-400">
+        <div class="counter-item"><span class="counter-value" data-target="71000">0</span><span class="counter-label">Lives Lost Yearly</span></div>
+        <div class="counter-item"><span class="counter-value" data-target="740">0</span><span class="counter-label">Billion $ Impact</span></div>
+        <div class="counter-item"><span class="counter-value" data-target="40">0</span><span class="counter-label">% Drug-Related Crime</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories" class="testimonials">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">Stories of Triumph</h2>
+      <p class="section-subtitle animate-on-scroll delay-100">Real people, real struggles, real victories. Be inspired by those who chose life over addiction.</p>
+      <div class="testimonial-slider animate-on-scroll delay-200">
+        <div class="testimonial-slides">
+          <div class="testimonial-slide active">
+            <div class="testimonial-content">
+              <i class="fas fa-quote-left fa-2x mb-4" style="color: var(--secondary)"></i>
+              <p class="testimonial-quote">I lost everything to addiction—my job, my family, my hope. Recovery taught me resilience and gave me a second chance to rebuild my life. Today, I help others find their path to sobriety.</p>
+              <div class="testimonial-author">
+                <h3>Sarah, 26</h3><p>3 Years Clean</p>
+              </div>
+            </div>
+            <div class="testimonial-image" style="background-image: url('https://images.pexels.com/photos/1462630/pexels-photo-1462630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')"></div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="testimonial-content">
+              <i class="fas fa-quote-left fa-2x mb-4" style="color: var(--secondary)"></i>
+              <p class="testimonial-quote">Drugs took my teenage years. I was headed for prison or death until a friend reached out. Sobriety gave me purpose and a future I never imagined was possible. Don't wait until rock bottom.</p>
+              <div class="testimonial-author">
+                <h3>Michael, 22</h3><p>2 Years Clean</p>
+              </div>
+            </div>
+            <div class="testimonial-image" style="background-image: url('https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')"></div>
+          </div>
+        </div>
+        <div class="testimonial-controls">
+          <div class="testimonial-dots">
+            <span class="testimonial-dot active" data-slide="0"></span>
+            <span class="testimonial-dot" data-slide="1"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="resources" class="resources">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">Resources for Recovery</h2>
+      <p class="section-subtitle animate-on-scroll delay-100">You're not alone. Access tools and support to start your journey to a drug-free life today.</p>
+      <div class="resources-grid">
+        <div class="resource-card animate-on-scroll delay-200">
+          <div class="resource-icon"><i class="fas fa-phone"></i></div>
+          <h3>24/7 Helpline</h3>
+          <p>Connect with trained experts for immediate support, crisis intervention, and guidance to local treatment options that fit your needs.</p>
+          <a href="#" class="btn btn-primary">Call Now</a>
+        </div>
+        <div class="resource-card animate-on-scroll delay-300">
+          <div class="resource-icon"><i class="fas fa-book"></i></div>
+          <h3>Education Hub</h3>
+          <p>Access research-based information about addiction, recovery pathways, and effective prevention strategies for yourself and loved ones.</p>
+          <a href="#" class="btn btn-primary">Explore</a>
+        </div>
+        <div class="resource-card animate-on-scroll delay-400">
+          <div class="resource-icon"><i class="fas fa-users"></i></div>
+          <h3>Support Groups</h3>
+          <p>Join communities of people on the same journey, sharing strength, experience and hope as you work together toward lasting sobriety.</p>
+          <a href="#" class="btn btn-primary">Find a Group</a>
+        </div>
+      </div>
+      <div class="emergency-block animate-on-scroll delay-500">
+        <h3>Need Help Now?</h3>
+        <p>In a crisis? Don't wait. Reach out immediately for life-saving support from trained professionals available 24/7.</p>
+        <div class="emergency-numbers">
+          <div class="emergency-number"><span class="number">911</span><span class="label">Emergency</span></div>
+          <div class="emergency-number"><span class="number">988</span><span class="label">Crisis Hotline</span></div>
+          <div class="emergency-number"><span class="number">1-800-662-HELP</span><span class="label">Substance Abuse</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pledge" class="pledge">
+    <div class="container">
+      <div class="pledge-content">
+        <div class="pledge-info animate-on-scroll">
+          <h2 class="section-title">Pledge for a Drug-Free Future</h2>
+          <p class="section-subtitle">Take a stand. Your commitment inspires others and strengthens our movement against substance abuse. Join thousands who have pledged to choose life.</p>
+          <p><strong><span id="pledge-counter">0</span> people have pledged!</strong></p>
+        </div>
+        <div class="pledge-form animate-on-scroll delay-200">
+          <h3>Join the Movement</h3>
+          <form id="pledgeForm">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" required aria-required="true">
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" required aria-required="true">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Take the Pledge</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-info">
+          <h3 class="logo-text mb-4">ChooseLife</h3>
+          <p>Empowering communities to overcome addiction through education, support, and action. Together, we can create a world where everyone has the opportunity to thrive.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-links-column">
+            <h3>Resources</h3>
+            <ul>
+              <li><a href="#">Prevention Guides</a></li>
+              <li><a href="#">Treatment Centers</a></li>
+              <li><a href="#">Support Groups</a></li>
+              <li><a href="#">Recovery Stories</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-column">
+            <h3>About</h3>
+            <ul>
+              <li><a href="#">Our Mission</a></li>
+              <li><a href="#">Team</a></li>
+              <li><a href="#">Partners</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p>© 2025 ChooseLife. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script>
+    // Enhanced Particles
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const particles = [];
+    const particleCount = window.innerWidth < 768 ? 100 : 200;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 1.5 - 0.75;
+        this.speedY = Math.random() * 1.5 - 0.75;
+        this.color = `hsl(${Math.random() * 360}, 70%, 70%)`;
+        this.opacity = Math.random() * 0.5 + 0.3;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+        if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+        this.opacity = Math.sin(Date.now() * 0.001 + this.x) * 0.3 + 0.5;
+      }
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.opacity;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function init() {
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((particle, index) => {
+        particle.update();
+        particle.draw();
+        for (let j = index + 1; j < particles.length; j++) {
+          const dx = particle.x - particles[j].x;
+          const dy = particle.y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 150) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 - distance / 500})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      });
+      requestAnimationFrame(animate);
+    }
+    init();
+    animate();
+
+    // Scroll Animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+    // Header Scroll
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('.header');
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Mobile Menu
+    const mobileToggle = document.querySelector('.mobile-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    mobileToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+      mobileToggle.classList.toggle('active');
+      mobileToggle.querySelector('i').classList.toggle('fa-bars');
+      mobileToggle.querySelector('i').classList.toggle('fa-times');
+      mobileToggle.setAttribute('aria-expanded', navMenu.classList.contains('active'));
+    });
+
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        mobileToggle.classList.remove('active');
+        mobileToggle.querySelector('i').classList.add('fa-bars');
+        mobileToggle.querySelector('i').classList.remove('fa-times');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Facts Tabs
+    document.querySelectorAll('.fact-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabId = tab.dataset.tab;
+        document.querySelectorAll('.fact-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.fact-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelector(`.fact-content[data-content="${tabId}"]`).classList.add('active');
+      });
+    });
+
+    // Testimonial Slider
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const dots = document.querySelectorAll('.testimonial-dot');
+
+    function showSlide(index) {
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      slides[index].classList.add('active');
+      dots[index].classList.add('active');
+    }
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        currentSlide = index;
+        showSlide(currentSlide);
+      });
+    });
+
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }, 6000);
+
+    // Counter Animation
+    function animateCounter(el, target) {
+      let count = 0;
+      const increment = target / 100;
+      const interval = setInterval(() => {
+        count += increment;
+        if (count >= target) {
+          count = target;
+          clearInterval(interval);
+        }
+        el.textContent = Math.round(count).toLocaleString();
+      }, 20);
+    }
+
+    const counters = document.querySelectorAll('.counter-value');
+    const counterObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          counters.forEach(counter => {
+            animateCounter(counter, parseInt(counter.dataset.target));
+          });
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    counterObserver.observe(document.querySelector('.facts-counter'));
+
+    // Pledge Form
+    let pledgeCount = 8764;
+    const pledgeCounter = document.getElementById('pledge-counter');
+    pledgeCounter.textContent = pledgeCount.toLocaleString();
+    
+    document.getElementById('pledgeForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const form = e.target;
+      const name = form.querySelector('#name').value;
+      const email = form.querySelector('#email').value;
+      pledgeCount++;
+      pledgeCounter.textContent = pledgeCount.toLocaleString();
+      form.innerHTML = `
+        <div class="text-center">
+          <i class="fas fa-check-circle fa-3x mb-3" style="color: var(--success)"></i>
+          <h4>Thank You, ${name}!</h4>
+          <p>Your pledge is inspiring others. Check ${email} for confirmation.</p>
+        </div>
+      `;
+    });
+
+    // Enhanced Interactive Elements
+    document.querySelectorAll('.resource-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-15px) rotateX(5deg)';
+      });
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+  </script>
+</body>
+</html>
